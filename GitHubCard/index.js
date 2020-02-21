@@ -24,7 +24,7 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['chriswschultz', 'bschatzj', 'tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,6 +45,71 @@ const followersArray = [];
 </div>
 
 */
+
+const gitHubUserComponent = (user) => {
+
+    const card = document.createElement('div');
+    card.classList.add('card');
+
+    const avatar = document.createElement('img');
+    avatar.setAttribute('src', `${user.avatar_url}`);
+    card.appendChild(avatar);
+
+    const cardInfo = document.createElement('div');
+    cardInfo.classList.add('card-info');
+    card.appendChild(cardInfo);
+
+    const cardName = document.createElement('h3');
+    cardName.classList.add('name');
+    cardName.textContent = user.name;
+    cardInfo.appendChild(cardName);
+
+    const userName = document.createElement('p');
+    userName.classList.add('username');
+    userName.textContent = user.login;
+    cardInfo.appendChild(userName);
+
+    const loc = document.createElement('p');
+    loc.textContent = `Location: ${user.location}`;
+    cardInfo.appendChild(loc);
+
+    const profile = document.createElement('p');
+    profile.textContent = 'Profile: ';
+    cardInfo.appendChild(profile);
+
+    const profileLink = document.createElement('a');
+    profileLink.setAttribute('href', `${user.html_url}`);
+    profileLink.textContent = `${user.html_url}`;
+    profile.appendChild(profileLink);
+
+    const followers = document.createElement('p');
+    followers.textContent = `Followers: ${user.followers}`;
+    cardInfo.appendChild(followers);
+
+    const following = document.createElement('p');
+    following.textContent = `Following: ${user.following}`;
+    cardInfo.appendChild(following);
+
+    const bio = document.createElement('p');
+    bio.textContent = `Bio: ${user.bio}`;
+    cardInfo.appendChild(bio);
+
+    return card;
+};
+
+const cards = document.querySelector('.cards');
+
+const getUser = (username) => {
+    axios.get(`https://api.github.com/users/${username}`)
+        .then((user) => {
+            cards.appendChild(gitHubUserComponent(user.data))
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+};
+
+followersArray.forEach((username) => { getUser(username) });
 
 /* List of LS Instructors Github username's: 
   tetondan
